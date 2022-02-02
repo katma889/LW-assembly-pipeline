@@ -304,4 +304,41 @@ export PATH=/nesi/nobackup/uoo02772/bin/LR_Gapcloser/src:$PATH
 sh LR_Gapcloser.sh -i scaffolds.fasta -l lw_ont_nanolyse_porechop.fastq.gz -s n -t 10 -r 15
 
 ```
+## Notes-  command "nn_seff jobid" to see after the completion to see the memory consumed by the job. Then we again ran QUAST upto 15 iteration files as the product of LR-Gapcloser.
+### Script for QUAST
+```
+#!/bin/bash -e
 
+#SBATCH --nodes 1
+#SBATCH --cpus-per-task 1
+#SBATCH --ntasks 10
+#SBATCH --partition=large
+#SBATCH --job-name quast_lw_gap
+#SBATCH --mem=30G
+#SBATCH --time=10:00:00
+#SBATCH --account=uoo02772
+#SBATCH --output=%x_%j.out
+#SBATCH --error=%x_%j.err
+#SBATCH --mail-type=ALL
+#SBATCH --mail-user=katma889@student.otago.ac.nz
+#SBATCH --hint=nomultithread
+
+module load QUAST
+quast.py -t 10 --eukaryote --large --conserved-genes-finding \
+iteration-1/gapclosed.fasta \
+iteration-2/gapclosed.fasta \
+iteration-3/gapclosed.fasta \
+iteration-4/gapclosed.fasta \
+iteration-5/gapclosed.fasta \
+iteration-6/gapclosed.fasta \
+iteration-7/gapclosed.fasta \
+iteration-8/gapclosed.fasta \
+iteration-9/gapclosed.fasta \
+iteration-10/gapclosed.fasta \
+iteration-11/gapclosed.fasta \
+iteration-12/gapclosed.fasta \
+iteration-13/gapclosed.fasta \
+iteration-14/gapclosed.fasta \
+iteration-15/gapclosed.fasta \
+-o quast
+```
