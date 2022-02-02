@@ -201,4 +201,107 @@ curated.fasta \
 -o quast
 
 ```
+## Then we ran LRscaff where we scaffold the contains from purge haplotigs as "curated fasta" to our filtered and trimmed raw data (lw_ont_nanolyse_porechop.fastq.gz) for five times using the script below:
+### Script for LRscaff
+```
+#!/bin/bash -e
+
+#SBATCH --nodes 1
+#SBATCH --cpus-per-task 1
+#SBATCH --ntasks 10
+#SBATCH --partition=large
+#SBATCH --job-name lrscaf.lw.large
+#SBATCH --mem=50G
+#SBATCH --time=72:00:00
+#SBATCH --account=uoo02752
+#SBATCH --output=%x_%j.out
+#SBATCH --error=%x_%j.err
+#SBATCH --mail-type=ALL
+#SBATCH --mail-user=bhaup057@student.otago.ac.nz
+#SBATCH --hint=nomultithread
+
+module load minimap2
+
+minimap2 -t 10 curated.fasta lw_ont_nanolyse_porechop.fastq.gz > ./aln.mm
+export PATH="/nesi/nobackup/uoo02752/bin/lrscaf/target/:$PATH"
+
+java -Xms40g -Xmx40g -jar /nesi/nobackup/uoo02752/bin/lrscaf/target/LRScaf-1.1.11.jar --contig curated.fasta --alignedFile aln.mm -t mm -p 10 --output ./scaffolds1
+
+minimap2 -t 10 ./scaffolds1/scaffolds.fasta lw_ont_nanolyse_porechop.fastq.gz > ./scaffolds1/aln.mm
+export PATH="/nesi/nobackup/uoo02752/bin/lrscaf/target/:$PATH"
+
+java -Xms40g -Xmx40g -jar /nesi/nobackup/uoo02752/bin/lrscaf/target/LRScaf-1.1.11.jar --contig ./scaffolds1/scaffolds.fasta --alignedFile ./scaffolds1/aln.mm -t mm -p 10 --output ./scaffolds1/scaffolds2
+
+minimap2 -t 10 ./scaffolds1/scaffolds2/scaffolds.fasta lw_ont_nanolyse_porechop.fastq.gz > ./scaffolds1/scaffolds2/aln.mm
+export PATH="/nesi/nobackup/uoo02752/bin/lrscaf/target/:$PATH"
+
+java -Xms40g -Xmx40g -jar /nesi/nobackup/uoo02752/bin/lrscaf/target/LRScaf-1.1.11.jar --contig ./scaffolds1/scaffolds2/scaffolds.fasta --alignedFile ./scaffolds1/scaffolds2/aln.mm -t mm -p 10 --output ./scaffolds1/scaffolds2/scaffolds3
+
+minimap2 -t 10 ./scaffolds1/scaffolds2/scaffolds3/scaffolds.fasta lw_ont_nanolyse_porechop.fastq.gz > ./scaffolds1/scaffolds2/scaffolds3/aln.mm
+export PATH="/nesi/nobackup/uoo02752/bin/lrscaf/target/:$PATH"
+
+java -Xms40g -Xmx40g -jar /nesi/nobackup/uoo02752/bin/lrscaf/target/LRScaf-1.1.11.jar --contig ./scaffolds1/scaffolds2/scaffolds3/scaffolds.fasta --alignedFile ./scaffolds1/scaffolds2/scaffolds3/aln.mm -t mm -p 10 --output ./scaffolds1/scaffolds2/scaffolds3/scaffolds4
+
+minimap2 -t 10 ./scaffolds1/scaffolds2/scaffolds3/scaffolds4/scaffolds.fasta lw_ont_nanolyse_porechop.fastq.gz > ./scaffolds1/scaffolds2/scaffolds3/scaffolds4/aln.mm
+export PATH="/nesi/nobackup/uoo02752/bin/lrscaf/target/:$PATH"
+
+java -Xms40g -Xmx40g -jar /nesi/nobackup/uoo02752/bin/lrscaf/target/LRScaf-1.1.11.jar --contig ./scaffolds1/scaffolds2/scaffolds3/scaffolds4/scaffolds.fasta --alignedFile ./scaffolds1/scaffolds2/scaffolds3/scaffolds4/aln.mm -t mm -p 10 --output ./scaffolds1/scaffolds2/scaffolds3/scaffolds4/scaffolds5
+
+```
+## Then we ran QUAST on all 5 output produced by the LRscaff
+### Script for QUAST
+```
+#!/bin/bash -e
+
+#SBATCH --nodes 1
+#SBATCH --cpus-per-task 1
+#SBATCH --ntasks 10
+#SBATCH --partition=large
+#SBATCH --job-name quast_lw1
+#SBATCH --mem=10G
+#SBATCH --time=10:00:00
+#SBATCH --account=uoo02772
+#SBATCH --output=%x_%j.out
+#SBATCH --error=%x_%j.err
+#SBATCH --mail-type=ALL
+#SBATCH --mail-user=katma889@student.otago.ac.nz
+#SBATCH --hint=nomultithread
+
+module load QUAST
+quast.py -t 10 --eukaryote --large --conserved-genes-finding \
+/nesi/nobackup/uoo02772/lw/2.nanopore/1.lw_nanopore_raw/guppy.5/pycoqc/nanolyse/porechop/flye/flye/Purge-haplotig/lrscaff/scaffolds1/scaffolds2/scaffolds3/scaffolds4/scaffolds5/scaffolds.fasta \
+/nesi/nobackup/uoo02772/lw/2.nanopore/1.lw_nanopore_raw/guppy.5/pycoqc/nanolyse/porechop/flye/flye/Purge-haplotig/lrscaff/scaffolds1/scaffolds2/scaffolds3/scaffolds4/scaffolds.fasta \
+/nesi/nobackup/uoo02772/lw/2.nanopore/1.lw_nanopore_raw/guppy.5/pycoqc/nanolyse/porechop/flye/flye/Purge-haplotig/lrscaff/scaffolds1/scaffolds2/scaffolds3/scaffolds.fasta \
+/nesi/nobackup/uoo02772/lw/2.nanopore/1.lw_nanopore_raw/guppy.5/pycoqc/nanolyse/porechop/flye/flye/Purge-haplotig/lrscaff/scaffolds1/scaffolds2/scaffolds.fasta \
+/nesi/nobackup/uoo02772/lw/2.nanopore/1.lw_nanopore_raw/guppy.5/pycoqc/nanolyse/porechop/flye/flye/Purge-haplotig/lrscaff/scaffolds1/scaffolds.fasta \
+-o quast
+
+```
+## Then we used LR_Gapcloser for gap closing using the output "scaffold.fasta" obatined from LRscaff and ONT filtered and trimmed raw reads.
+### Script for LR_Gapcloser 
+```
+#!/bin/bash -e
+
+#SBATCH --nodes 1
+#SBATCH --cpus-per-task 1
+#SBATCH --ntasks 10
+##SBATCH --qos=debug
+#SBATCH --partition=large
+#SBATCH --job-name lr-gaplw
+#SBATCH --mem=20G
+##SBATCH --time=00:15:00
+#SBATCH --time=72:00:00
+#SBATCH --account=uoo02772
+#SBATCH --output=%x_%j.out
+#SBATCH --error=%x_%j.err
+#SBATCH --mail-type=ALL
+#SBATCH --mail-user=katma889@student.otago.ac.nz
+#SBATCH --hint=nomultithread
+
+module load BWA/0.7.17-GCC-9.2.0
+export PATH=/nesi/nobackup/uoo02772/bin/LR_Gapcloser/src:$PATH
+
+sh LR_Gapcloser.sh -i scaffolds.fasta -l lw_ont_nanolyse_porechop.fastq.gz -s n -t 10 -r 15
+
+```
 
