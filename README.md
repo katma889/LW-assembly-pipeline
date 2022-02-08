@@ -117,7 +117,7 @@ module load Porechop/0.2.4-gimkl-2020a-Python-3.8.2
 porechop -i ../lw_ont_filtered.fastq.gz -o lw_ont_nanolyse_porechop.fastq.gz --threads 10
 
 ```
-Then we run Flye (2.8.3) assembler to lw_ont_nanolyse_porechop.fastq.gz which gave us result under flye folder with different files
+Then we run Flye (2.8.3) assembler to `lw_ont_nanolyse_porechop.fastq.gz` which gave us result under flye folder with different files
 
 `Script for Flye`
 
@@ -143,7 +143,7 @@ module load Flye/2.8.3-gimkl-2020a-Python-3.8.2
 flye --nano-raw ../lw_ont_nanolyse_porechop.fastq.gz -o ./flye -t 16 -i 3 --resume
 
 ```
-Thenafter we ran Purge-haplotigs to identify and remove both haplotigs and heterozygous overlaps on assembly.fasta files produced by flye assembler
+Thenafter we ran `Purge-haplotigs` to identify and remove both haplotigs and heterozygous overlaps on `assembly.fasta` files produced by `flye` assembler
 
 `Script for Purge-haplotigs`
 
@@ -211,7 +211,7 @@ curated.fasta \
 -o quast
 
 ```
-Then we ran LRscaff where we scaffold the contains from purge haplotigs as "curated fasta" to our filtered and trimmed raw data (lw_ont_nanolyse_porechop.fastq.gz) for five times using the script below:
+Then we ran `LRscaff` where we scaffold the contains from purge haplotigs as `curated fasta` to our filtered and trimmed raw data that is `lw_ont_nanolyse_porechop.fastq.gz` for five times using the script below:
 
 `Script for LRscaff`
 
