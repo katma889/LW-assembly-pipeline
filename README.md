@@ -15,8 +15,8 @@ We got an output yield of raw data 9.38 Gb, 6.21 Gb, 3.77 Gb and 10.6 Gb from is
 #SBATCH --time=40:00:00                 #wall time
 #SBATCH --partition=gpu                 #guppy runs faster in gpu partition in nesi, than other partition
 #SBATCH --gres=gpu:1                    #some configuration for gpu partition, that i don't understand, suggested by nesi support
-#SBATCH --mem=6G                                # memory 6gb
-#SBATCH --ntasks=6                              #ntask set to 4
+#SBATCH --mem=6G                         #memory 6gb
+#SBATCH --ntasks=6                       #ntask set to 4
 #SBATCH --cpus-per-task=1               #cpu per task set to 1
 #SBATCH --output=%x-%j.out              #%x gives job name and %j gives job number, this is slurm output file
 #SBATCH --error=%x-%j.err               #similar slurm error file
