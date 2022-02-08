@@ -59,7 +59,7 @@ Pycoqc report for minion runs
 `Pycoqc report for 4 minion runs`
 
 ```
-Minion Runs	 Reads	        Bases (Gb)	  Median Read Length	  Median PHRED score
+Minion Runs	 Reads	       Bases (Gb)	  Median Read Length	  Median PHRED score
 1	          3,907,351	     9.37	         838	                13.6
 2	          768,000	       6.41	        2410	                12.4
 3	          673,176	       4.02	        3480	                12.5
