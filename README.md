@@ -1,11 +1,12 @@
-# LW-assembly-pipeline
+## Lucerne weevil-assembly-pipeline
 S.discoidus whole genome assembly pipeline
-# Sequencing of lucerne weevil
-## We sequenced individual 4 different lucerne weevil using Minion flow cells which in total gave us coverage over > 30 times the genome of this weevil. Similarly we  sequenced the weevil using linked read technology (10x data) which is over 60 times the coverage of the estimated genome of this weevil.
+## Sequencing of lucerne weevil
+ We sequenced individual 4 different lucerne weevil using Minion flow cells which in total gave us coverage over > 30 times the genome of this weevil. Similarly we  sequenced the weevil using linked read technology (10x data) which is over 60 times the coverage of the estimated genome of this weevil.
 ### Long read genome assembly of this weevil 
- #### We got an output yield of raw data 9.38 Gb, 6.21 Gb, 3.77 Gb and 10.6 Gb from ist. second, 3rd and 4th run respectively. We combined the total out from 4 minion runs and ran basecalling. First raw fast5 files were base called using guppy
+We got an output yield of raw data 9.38 Gb, 6.21 Gb, 3.77 Gb and 10.6 Gb from ist. second, 3rd and 4th run respectively. We combined the total out from 4 minion runs and ran basecalling. First raw fast5 files were base called using guppy
 
- ## Script for Guppy version 5
+ `Script for Guppy version 5`
+ 
  ```
  #!/bin/bash -e
 
@@ -26,8 +27,10 @@ module load ont-guppy-gpu/5.0.7
 guppy_basecaller -i ../ -s . --flowcell FLO-MIN106 --kit SQK-LSK109 --num_callers 6 -x auto --recursive --trim_barcodes --disable_qscore_filtering
 
 ```
-## Then after we ran pycoQC on base called fastq files obatined from guppy for every minion runs.
-### Script for PycoQC
+Then after we ran `pycoQC` on base called fastq files obatined from guppy for every minion runs.
+
+`Script for PycoQC`
+
 ```
 #!/bin/bash -e
 
@@ -53,20 +56,20 @@ pycoQC -f ../sequencing_summary.txt -o pycoQC_output.html
 The output for pycoqc runs are given in the table below
 Pycoqc report for minion runs
 
-The output for pycoqc runs are given in the table below
-Pycoqc report for minion runs
+`Pycoqc report for minion runs`
 
-Pycoqc report for minion runs				
-Pycoqc report for minion runs		
+```
 Minion Runs	 Reads	        Bases (Gb)	  Median Read Length	   Median PHRED score
 1	           3,907,351	     9.37	        838	                   13.6
 2	          768,000	        6.41	        2410	                 12.4
 3	          673,176	       4.02	         3480	                   12.5
 4	          2,210,541	    10.6	         1300	                   13.4
 
+```
+Then we ran nanlolyse in the guppy basecalled fast files to remove lama DNA CS (control) from our fastq file.
 
-##  Then we ran nanlolyse in the guppy basecalled fast files to remove lama DNA CS (control) from our fastq file.
-### Script for nanolyze
+`Script for nanolyze`
+
 ```
 #!/bin/bash -e
 
@@ -89,8 +92,9 @@ export PATH="/nesi/nobackup/uoo02752/nematode/bin/miniconda3/bin:$PATH"
 cat ../lw.ont.all.merged.fastq | NanoLyse --reference ./dna_cs.fasta | gzip > lw_ont_filtered.fastq.gz
 
 ```
-## The above run gave us filleted reads named "lw_ont_filtered.fastq.gz".Then the filtered reads were further processed to Porechop to find and remove the adapters from filetred reads
-### Script for porechop
+The above run gave us filleted reads named `lw_ont_filtered.fastq.gz`.Then the filtered reads were further processed to Porechop to find and remove the adapters from filetred reads
+
+`Script for porechop`
 
 ```
 #!/bin/bash -e
@@ -113,8 +117,10 @@ module load Porechop/0.2.4-gimkl-2020a-Python-3.8.2
 porechop -i ../lw_ont_filtered.fastq.gz -o lw_ont_nanolyse_porechop.fastq.gz --threads 10
 
 ```
-## Then we run Flye (2.8.3) assembler to lw_ont_nanolyse_porechop.fastq.gz which gave us result under flye folder with different files
-Script for Flye is given below
+Then we run Flye (2.8.3) assembler to lw_ont_nanolyse_porechop.fastq.gz which gave us result under flye folder with different files
+
+`Script for Flye is given below`
+
 ```
 #!/bin/bash -e
 
@@ -137,8 +143,10 @@ module load Flye/2.8.3-gimkl-2020a-Python-3.8.2
 flye --nano-raw ../lw_ont_nanolyse_porechop.fastq.gz -o ./flye -t 16 -i 3 --resume
 
 ```
-## Thenafter we ran Purge-haplotigs to identify and remove both haplotigs and heterozygous overlaps on assembly.fasta files produced by flye assembler
-### Script for Purge-haplotigs
+Thenafter we ran Purge-haplotigs to identify and remove both haplotigs and heterozygous overlaps on assembly.fasta files produced by flye assembler
+
+`Script for Purge-haplotigs`
+
 ```
 #!/bin/bash -e
 
@@ -176,8 +184,10 @@ export PATH="/nesi/nobackup/uoo02772/bin/miniconda3/envs/purge_haplotigs_env/bin
 purge_haplotigs purge -g assembly.fasta -c coverage_stats.csv -b aligned.bam -dotplots
 
 ```
-## This above script gave us the histo file to see the quality and our main output file curated.fasta which were further processed to run QUAST.
-### Script for QUAST
+This above script gave us the histo file to see the quality and our main output file `curated.fasta` which were further processed to run QUAST.
+
+`Script for QUAST`
+
 ```
 #!/bin/bash -e
 
@@ -201,8 +211,10 @@ curated.fasta \
 -o quast
 
 ```
-## Then we ran LRscaff where we scaffold the contains from purge haplotigs as "curated fasta" to our filtered and trimmed raw data (lw_ont_nanolyse_porechop.fastq.gz) for five times using the script below:
-### Script for LRscaff
+Then we ran LRscaff where we scaffold the contains from purge haplotigs as "curated fasta" to our filtered and trimmed raw data (lw_ont_nanolyse_porechop.fastq.gz) for five times using the script below:
+
+`Script for LRscaff`
+
 ```
 #!/bin/bash -e
 
@@ -248,8 +260,10 @@ export PATH="/nesi/nobackup/uoo02752/bin/lrscaf/target/:$PATH"
 java -Xms40g -Xmx40g -jar /nesi/nobackup/uoo02752/bin/lrscaf/target/LRScaf-1.1.11.jar --contig ./scaffolds1/scaffolds2/scaffolds3/scaffolds4/scaffolds.fasta --alignedFile ./scaffolds1/scaffolds2/scaffolds3/scaffolds4/aln.mm -t mm -p 10 --output ./scaffolds1/scaffolds2/scaffolds3/scaffolds4/scaffolds5
 
 ```
-## Then we ran QUAST on all 5 output produced by the LRscaff
-### Script for QUAST
+Then we ran `QUAST` on all 5 output produced by the LRscaff
+
+`Script for QUAST`
+
 ```
 #!/bin/bash -e
 
