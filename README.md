@@ -27,7 +27,7 @@ module load ont-guppy-gpu/5.0.7
 guppy_basecaller -i ../ -s . --flowcell FLO-MIN106 --kit SQK-LSK109 --num_callers 6 -x auto --recursive --trim_barcodes --disable_qscore_filtering
 
 ```
-Then after we ran `pycoQC` on base called fastq files obatined from guppy for every minion runs.
+Then after we ran `pycoQC` on base called fastq files obatined from `guppy` for every minion runs.
 
 `Script for PycoQC`
 
@@ -92,7 +92,7 @@ export PATH="/nesi/nobackup/uoo02752/nematode/bin/miniconda3/bin:$PATH"
 cat ../lw.ont.all.merged.fastq | NanoLyse --reference ./dna_cs.fasta | gzip > lw_ont_filtered.fastq.gz
 
 ```
-The above run gave us filleted reads named `lw_ont_filtered.fastq.gz`.Then the filtered reads were further processed to Porechop to find and remove the adapters from filetred reads
+The above run gave us filleted reads named `lw_ont_filtered.fastq.gz`.Then the filtered reads were further processed to `Porechop` to find and remove the adapters from filetred reads
 
 `Script for porechop`
 
@@ -291,8 +291,10 @@ quast.py -t 10 --eukaryote --large --conserved-genes-finding \
 -o quast
 
 ```
-## Then we used LR_Gapcloser for gap closing using the output "scaffold.fasta" obatined from LRscaff and ONT filtered and trimmed raw reads.
-### Script for LR_Gapcloser 
+Then we used `LR_Gapcloser` for gap closing using the output `scaffold.fasta` obatined from `LRscaff` and ONT filtered and trimmed raw reads.
+
+`Script for LR_Gapcloser`
+
 ```
 #!/bin/bash -e
 
@@ -318,8 +320,10 @@ export PATH=/nesi/nobackup/uoo02772/bin/LR_Gapcloser/src:$PATH
 sh LR_Gapcloser.sh -i scaffolds.fasta -l lw_ont_nanolyse_porechop.fastq.gz -s n -t 10 -r 15
 
 ```
-## Notes-  command "nn_seff jobid" to see after the completion to see the memory consumed by the job. Then we again ran QUAST upto 15 iteration files as the product of LR-Gapcloser.
-### Script for QUAST
+ Notes-  command `nn_seff jobid` to see after the completion to see the memory consumed by the job. Then we again ran `QUAST` upto 15 iteration files as the product of LR-Gapcloser.
+ 
+ `Script for QUAST`
+ 
 ```
 #!/bin/bash -e
 
@@ -355,4 +359,5 @@ iteration-13/gapclosed.fasta \
 iteration-14/gapclosed.fasta \
 iteration-15/gapclosed.fasta \
 -o quast
+
 ```
