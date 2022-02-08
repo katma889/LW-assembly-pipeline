@@ -59,11 +59,11 @@ Pycoqc report for minion runs
 `Pycoqc report for 4 minion runs`
 
 ```
-Minion Runs	 Reads	        Bases (Gb)	  Median Read Length	   Median PHRED score
-1	          3,907,351	     9.37	         838	                   13.6
-2	          768,000	        6.41	        2410	                 12.4
-3	          673,176	        4.02	        3480	                12.5
-4	          2,210,541	      10.6	        1300	                13.4
+Minion Runs	 Reads	        Bases (Gb)	  Median Read Length	  Median PHRED score
+1	          3,907,351	     9.37	         838	                13.6
+2	          768,000	       6.41	        2410	                12.4
+3	          673,176	       4.02	        3480	                12.5
+4	          2,210,541	     10.6	        1300	                13.4
 
 ```
 Then we ran nanlolyse in the guppy basecalled fast files to remove lama DNA CS (control) from our fastq file.
