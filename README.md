@@ -361,3 +361,32 @@ iteration-15/gapclosed.fasta \
 -o quast
 
 ```
+The `LR-gapcloser` didnot worked for the assembly as it was unable to reduce the gaps. The output of Quast is given below;
+
+```
+Assembly                    iteration-1_gapclosed  iteration-2_gapclosed
+# contigs (>= 0 bp)         18665                  18665                
+# contigs (>= 1000 bp)      17452                  17452                
+# contigs (>= 5000 bp)      12208                  12208                
+# contigs (>= 10000 bp)     10778                  10778                
+# contigs (>= 25000 bp)     8997                   8997                 
+# contigs (>= 50000 bp)     7273                   7273                 
+Total length (>= 0 bp)      1419357101             1419357101           
+Total length (>= 1000 bp)   1418499005             1418499005           
+Total length (>= 5000 bp)   1404810815             1404810815           
+Total length (>= 10000 bp)  1394614745             1394614745           
+Total length (>= 25000 bp)  1365331616             1365331616           
+Total length (>= 50000 bp)  1301626332             1301626332           
+# contigs                   13987                  13987                
+Largest contig              1834377                1834377              
+Total length                1411635412             1411635412           
+GC (%)                      32.97                  32.97                
+N50                         210194                 210194               
+N75                         118112                 118112               
+L50                         2059                   2059                 
+L75                         4297                   4297                 
+# N's per 100 kbp           3699.35                3699.35              
+Complete BUSCO (%)          96.04                  96.04                
+Partial BUSCO (%)           1.65                   1.65             
+
+```
