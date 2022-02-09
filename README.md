@@ -635,7 +635,7 @@ export PATH="/nesi/nobackup/uoo02752/nematode/bin/miniconda3/bin:$PATH"
 arbitr.py -i ../ragtag.scaffold.fasta -o output.arbitr.scaffolds longranger_align/LW/outs/possorted_bam.bam
 
 ```
-Then we ran `rascaf` using mRNA-seq data for this weevil that gives us output in q
+Then we ran `rascaf` using mRNA-seq data for this weevil that gives us output in a folder `alignment`
 
 `Script for hisat2`
 
