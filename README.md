@@ -498,3 +498,30 @@ export PATH="/nesi/nobackup/uoo02752/nematode/bin/miniconda3/bin:$PATH"
 ragtag.py scaffold ../../lw_10xSN.fasta ragtag1.fasta
 
 ```
+Then we ran `Quast` on the output of the above script.
+
+`Script for Quast`
+
+```
+#!/bin/bash -e
+
+#SBATCH --nodes 1
+#SBATCH --cpus-per-task 1
+#SBATCH --ntasks 10
+#SBATCH --partition=large
+#SBATCH --job-name quast_lw1
+#SBATCH --mem=10G
+#SBATCH --time=05:00:00
+#SBATCH --account=uoo02772
+#SBATCH --output=%x_%j.out
+#SBATCH --error=%x_%j.err
+#SBATCH --mail-type=ALL
+#SBATCH --mail-user=katma889@student.otago.ac.nz
+#SBATCH --hint=nomultithread
+
+module load QUAST
+quast.py -t 10 --eukaryote --large --conserved-genes-finding \
+ragtag.scaffold.fasta \
+-o quast
+
+```
