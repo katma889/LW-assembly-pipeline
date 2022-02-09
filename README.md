@@ -635,3 +635,40 @@ export PATH="/nesi/nobackup/uoo02752/nematode/bin/miniconda3/bin:$PATH"
 arbitr.py -i ../ragtag.scaffold.fasta -o output.arbitr.scaffolds longranger_align/LW/outs/possorted_bam.bam
 
 ```
+Then we ran `rascaf` using mRNA-seq data for this weevil that gives us output in q
+
+`Script for hisat2`
+
+```
+#!/bin/bash -e
+
+#SBATCH --job-name=hisat.mRNA.LW
+#SBATCH --account=uoo02772
+#SBATCH --nodes 1 
+#SBATCH --cpus-per-task 1 
+#SBATCH --ntasks 20
+#SBATCH --mem=40G
+##SBATCH --qos=debug
+##SBATCH --time=00:15:00
+#SBATCH --time=20:00:00
+#SBATCH --output=%x.%j.out
+#SBATCH --error=%x.%j.err
+#SBATCH --mail-type=All
+#SBATCH --mail-user=katma889@student.otago.ac.nz
+#SBATCH --hint=nomultithread
+
+module load HISAT2/2.2.1-gimkl-2020a
+module load Python/3.9.5-gimkl-2020a
+module load SAMtools/1.13-GCC-9.2.0
+
+
+hisat2-build -p 20 output.arbitr.scaffolds.fasta hisat2.RNA.LW
+
+mkdir alignment
+
+hisat2 -x hisat2.RNA.LW -1 ./RNA_seq_LW_merged.R1.fastq -2 ./RNA_seq_LW_merged.R2.fastq -S alignment/LW_mRNA_alignment.sam
+samtools view -bS alignment/LW_mRNA_alignment.sam > alignment/LW_mRNA_alignment.bam
+samtools sort alignment/LW_mRNA_alignment.bam -o alignment/LW_mRNA_alignment_sorted.bam
+
+```
+
