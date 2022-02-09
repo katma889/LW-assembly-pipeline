@@ -553,3 +553,85 @@ ragtag.py patch lw.assembly.fasta lw_10xSN.fasta \
 -t 10 --aligner /scale_wlg_persistent/filesets/opt_nesi/CS400_centos7_bdw/minimap2/2.20-GCC-9.2.0/bin/minimap2
 
 ```
+Then we ran Quast on the output.
+
+`Script for Quast`
+
+```
+#!/bin/bash -e
+
+#SBATCH --nodes 1
+#SBATCH --cpus-per-task 1
+#SBATCH --ntasks 10
+#SBATCH --job-name quast_lw1
+#SBATCH --mem=10G
+#SBATCH --time=03:00:00
+#SBATCH --account=uoo02772
+#SBATCH --output=%x_%j.out
+#SBATCH --error=%x_%j.err
+#SBATCH --mail-type=ALL
+#SBATCH --mail-user=katma889@student.otago.ac.nz
+#SBATCH --hint=nomultithread
+
+module load QUAST
+quast.py -t 10 --eukaryote --large --conserved-genes-finding \
+ragtag.patch.fasta \
+-o quast
+
+```
+The ouput of quast is given below
+
+```
+Assembly                    ragtag.patch
+# contigs (>= 0 bp)         18143       
+# contigs (>= 1000 bp)      16961       
+# contigs (>= 5000 bp)      11919       
+# contigs (>= 10000 bp)     10569       
+# contigs (>= 25000 bp)     8874        
+# contigs (>= 50000 bp)     7244        
+Total length (>= 0 bp)      1420292447  
+Total length (>= 1000 bp)   1419455842  
+Total length (>= 5000 bp)   1406321928  
+Total length (>= 10000 bp)  1396701794  
+Total length (>= 25000 bp)  1368869106  
+Total length (>= 50000 bp)  1308733677  
+# contigs                   13618       
+Largest contig              1835123     
+Total length                1412841458  
+GC (%)                      32.97       
+N50                         211737      
+N75                         121012      
+L50                         2037        
+L75                         4242        
+# N's per 100 kbp           3387.39     
+Complete BUSCO (%)          96.70       
+Partial BUSCO (%)           0.99      
+
+```
+Then we ran `arbitr`
+
+`Script for arbitr`
+
+```
+
+#!/bin/bash -e
+
+#SBATCH --nodes 1
+#SBATCH --cpus-per-task 1
+#SBATCH --ntasks 10
+#SBATCH --job-name arbitr.lw
+#SBATCH --mem=5G
+#SBATCH --time=05:00:00
+#SBATCH --account=uoo02772
+#SBATCH --output=%x_%j.out
+#SBATCH --error=%x_%j.err
+#SBATCH --mail-type=ALL
+#SBATCH --mail-user=katma889@student.otago.ac.nz
+#SBATCH --hint=nomultithread
+
+export PATH="/nesi/nobackup/uoo02752/nematode/bin/ARBitR/src:$PATH"
+export PATH="/nesi/nobackup/uoo02752/nematode/bin/miniconda3/bin:$PATH"
+
+arbitr.py -i ../ragtag.scaffold.fasta -o output.arbitr.scaffolds longranger_align/LW/outs/possorted_bam.bam
+
+```
