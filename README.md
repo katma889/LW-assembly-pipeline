@@ -473,3 +473,28 @@ export PATH="/nesi/nobackup/uoo02752/nematode/bin/miniconda3/bin:$PATH"
 ragtag.py scaffold lw_10xSN.fasta lw_ont_assembly.fasta
 
 ```
+Then we re-ran RagTag as `RagTag2` using the output as earlier RagTag output.
+
+`Script for RagTag2`
+
+```
+#!/bin/bash -e
+
+#SBATCH --nodes 1
+#SBATCH --cpus-per-task 1
+#SBATCH --ntasks 10
+#SBATCH --job-name ragtag.lw
+#SBATCH --mem=50G
+#SBATCH --time=03:00:00
+#SBATCH --account=uoo02772
+#SBATCH --output=%x_%j.out
+#SBATCH --error=%x_%j.err
+#SBATCH --mail-type=ALL
+#SBATCH --mail-user=katma889@student.otago.ac.nz
+#SBATCH --hint=nomultithread
+
+export PATH="/nesi/nobackup/uoo02752/nematode/bin/miniconda3/bin:$PATH"
+
+ragtag.py scaffold ../../lw_10xSN.fasta ragtag1.fasta
+
+```
