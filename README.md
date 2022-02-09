@@ -525,3 +525,31 @@ ragtag.scaffold.fasta \
 -o quast
 
 ```
+Then we used `minimap2` 
+
+`Script for minimap2`
+
+```
+
+#!/bin/bash -e
+
+#SBATCH --nodes 1
+#SBATCH --cpus-per-task 1
+#SBATCH --ntasks 10
+#SBATCH --job-name ragtag.patch.lw
+#SBATCH --mem=30G
+#SBATCH --time=20:00:00
+#SBATCH --account=uoo02772
+#SBATCH --output=%x_%j.out
+#SBATCH --error=%x_%j.err
+#SBATCH --mail-type=ALL
+#SBATCH --mail-user=katma889@student.otago.ac.nz
+#SBATCH --hint=nomultithread
+
+module load minimap2/2.20-GCC-9.2.0
+export PATH="/nesi/nobackup/uoo02752/nematode/bin/miniconda3/bin:$PATH"
+
+ragtag.py patch lw.assembly.fasta lw_10xSN.fasta \
+-t 10 --aligner /scale_wlg_persistent/filesets/opt_nesi/CS400_centos7_bdw/minimap2/2.20-GCC-9.2.0/bin/minimap2
+
+```
