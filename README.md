@@ -419,3 +419,57 @@ sh runRAILSminimapSTREAM.sh scaffold.fasta lw_ont_nanolyse_porechop.fasta 250 0.
 /scale_wlg_persistent/filesets/opt_nesi/CS400_centos7_bdw/SAMtools/1.13-GCC-9.2.0/bin/samtools 10
 
 ```
+We ran the `Quast' on the output of the above script. The output is given below;
+
+```
+Assembly                    lw_ont_nanolyse_porechop.fasta_vs_scaffold.fasta_250_0.80_rails.scaffolds
+# contigs (>= 0 bp)         18552                                                                    
+# contigs (>= 1000 bp)      17347                                                                    
+# contigs (>= 5000 bp)      12132                                                                    
+# contigs (>= 10000 bp)     10721                                                                    
+# contigs (>= 25000 bp)     8957                                                                     
+# contigs (>= 50000 bp)     7254                                                                     
+Total length (>= 0 bp)      1420251705                                                               
+Total length (>= 1000 bp)   1419399929                                                               
+Total length (>= 5000 bp)   1405783394                                                               
+Total length (>= 10000 bp)  1395724626                                                               
+Total length (>= 25000 bp)  1366699008                                                               
+Total length (>= 50000 bp)  1303721487                                                               
+# contigs                   13904                                                                    
+Largest contig              1835123                                                                  
+Total length                1412583413                                                               
+GC (%)                      32.97                                                                    
+N50                         210907                                                                   
+N75                         118846                                                                   
+L50                         2050                                                                     
+L75                         4276                                                                     
+# N's per 100 kbp           3385.16                                                                  
+Complete BUSCO (%)          96.37                                                                    
+Partial BUSCO (%)           1.32           
+
+```
+Then we ran `RagTag` 
+
+`Script for RagTag`
+
+```
+#!/bin/bash -e
+
+#SBATCH --nodes 1
+#SBATCH --cpus-per-task 1
+#SBATCH --ntasks 10
+#SBATCH --job-name ragtag.lw
+#SBATCH --mem=50G
+#SBATCH --time=28:00:00
+#SBATCH --account=uoo02772
+#SBATCH --output=%x_%j.out
+#SBATCH --error=%x_%j.err
+#SBATCH --mail-type=ALL
+#SBATCH --mail-user=katma889@student.otago.ac.nz
+#SBATCH --hint=nomultithread
+
+export PATH="/nesi/nobackup/uoo02752/nematode/bin/miniconda3/bin:$PATH"
+
+ragtag.py scaffold lw_10xSN.fasta lw_ont_assembly.fasta
+
+```
