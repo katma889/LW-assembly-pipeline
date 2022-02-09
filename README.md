@@ -390,3 +390,32 @@ Complete BUSCO (%)          96.04                  96.04
 Partial BUSCO (%)           1.65                   1.65             
 
 ```
+Then we ran 
+
+`Script for rails.cobler`
+
+```
+#!/bin/bash -e
+
+#SBATCH --nodes 1
+#SBATCH --cpus-per-task 1
+#SBATCH --ntasks 10
+#SBATCH --job-name rails.lw.2
+#SBATCH --mem=90G
+#SBATCH --time=72:00:00
+#SBATCH --account=uoo02752
+#SBATCH --output=%x_%j.out
+#SBATCH --error=%x_%j.err
+#SBATCH --mail-type=ALL
+#SBATCH --mail-user=bhaup057@student.otago.ac.nz
+#SBATCH --hint=nomultithread
+
+module load Perl/5.30.1-GCC-9.2.0
+module load minimap2
+module load SAMtools/1.13-GCC-9.2.0
+export PATH="/nesi/nobackup/uoo02772/path/to/RAILS/bin:$PATH"
+
+sh runRAILSminimapSTREAM.sh scaffold.fasta lw_ont_nanolyse_porechop.fasta 250 0.80 500 2 ont \
+/scale_wlg_persistent/filesets/opt_nesi/CS400_centos7_bdw/SAMtools/1.13-GCC-9.2.0/bin/samtools 10
+
+```
