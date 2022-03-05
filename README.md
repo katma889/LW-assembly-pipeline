@@ -760,7 +760,7 @@ export PATH="/nesi/nobackup/uoo02752/nematode/bin/miniconda3/bin:$PATH"
 ragtag.py scaffold ../curated.haplotigs.fasta ragtag.scaffold.renamed.fasta
 
 ```
-Then we ran `Blobtools` 
+Then we ran `Blobtools2` 
 
 `Script for Blobtools`
 
@@ -798,5 +798,64 @@ LW_Assembly
 --invert \
 --output ./filter.mincov5.minlen1000.invert \
 LW_Assembly
+
+```
+Then we ran `RagTag` to scaffold the filtered genome with the low coverage discarded reads from the above step.
+
+`Script for RagTag`
+
+```
+#!/bin/bash -e
+
+#SBATCH --nodes 1
+#SBATCH --cpus-per-task 1
+#SBATCH --ntasks 10
+#SBATCH --job-name ragtag.lw
+#SBATCH --mem=30G
+#SBATCH --time=01:00:00
+#SBATCH --account=uoo02772
+#SBATCH --output=%x_%j.out
+#SBATCH --error=%x_%j.err
+#SBATCH --mail-type=ALL
+#SBATCH --mail-user=katma889@student.otago.ac.nz
+#SBATCH --hint=nomultithread
+
+export PATH="/nesi/nobackup/uoo02752/nematode/bin/miniconda3/bin:$PATH"
+
+ragtag.py scaffold LW_Assembly.filtered.invert.fasta LW_Assembly.filtered.fasta
+
+```
+Then we ran `Pilon` for polishing the genome using filtered RNA-seq reads.
+
+`Script for Pilon`
+
+```
+#!/bin/bash -e
+
+#SBATCH --nodes 1
+#SBATCH --cpus-per-task 1
+#SBATCH --ntasks 16
+#SBATCH --job-name pilon_LW
+#SBATCH --mem=200G
+#SBATCH --time=3-00:00:00
+#SBATCH --account=uoo02772
+#SBATCH --output=%x_%j.out
+#SBATCH --error=%x_%j.err
+#SBATCH --mail-type=ALL
+#SBATCH --mail-user=katma889@student.otago.ac.nz
+#SBATCH --hint=nomultithread
+
+module load Bowtie2/2.4.1-GCC-9.2.0
+module load SAMtools/1.12-GCC-9.2.0
+module load Python/3.9.5-gimkl-2020a
+module load Pilon/1.24-Java-15.0.2
+
+#bowtie2-build LW_assembly.fasta weevil
+#bowtie2 -p 16 --local -x weevil -1 RNA_seq_LW_merged.R1.fastq -2 RNA_seq_LW_merged.R2.fastq | samtools sort > LW_assembly.fasta.bam
+#samtools index LW_assembly.fasta.bam LW_assembly.fasta.bai
+
+##To run Pilon
+java -Xmx200G -jar $EBROOTPILON/pilon.jar --genome LW_assembly.fasta --frags LW_assembly.fasta.bam --fix snps,indels --output LW_assembly.pilon \
+--gapmargin 1 --mingap 10000000 --threads 10 --verbose --changes 2>Pilon.stderr.txt 1>Pilon.stdout.txt
 
 ```
