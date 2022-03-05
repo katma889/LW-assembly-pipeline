@@ -739,6 +739,7 @@ Then we ran `RagTag` for scaffolding the curated genome using discarded haplotig
 
 `Script for RagTag`
 
+```
 #!/bin/bash -e
 
 #SBATCH --nodes 1
