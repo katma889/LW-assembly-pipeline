@@ -671,4 +671,33 @@ samtools view -bS alignment/LW_mRNA_alignment.sam > alignment/LW_mRNA_alignment.
 samtools sort alignment/LW_mRNA_alignment.bam -o alignment/LW_mRNA_alignment_sorted.bam
 
 ```
+Then we ran `rascaf`
+
+`Script for rascaf`
+
+```
+#!/bin/bash -e
+
+#SBATCH --job-name=rascaf.LW.mrna
+#SBATCH --account=uoo02772
+#SBATCH --nodes 1
+#SBATCH --cpus-per-task 1
+#SBATCH --ntasks 10
+#SBATCH --mem=5G
+#SBATCH --time=04:00:00
+#SBATCH --output=%x.%j.out
+#SBATCH --error=%x.%j.err
+#SBATCH --mail-type=All
+#SBATCH --mail-user=bhaup057@student.otago.ac.nz
+#SBATCH --hint=nomultithread
+
+export PATH=/nesi/nobackup/uoo02752/nematode/bin/rascaf:$PATH
+
+#rascaf -b alignment/LW_mRNA_alignment_sorted.bam \
+#        -f output.arbitr.scaffolds.fasta \
+#        -o LW_mRNA_scaffold
+
+rascaf-join -r LW_mRNA_scaffold.out -o LW_mRNA_scaffold
+
+```
 
