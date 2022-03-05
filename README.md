@@ -760,4 +760,43 @@ export PATH="/nesi/nobackup/uoo02752/nematode/bin/miniconda3/bin:$PATH"
 ragtag.py scaffold ../curated.haplotigs.fasta ragtag.scaffold.renamed.fasta
 
 ```
+Then we ran `Blobtools` 
 
+`Script for Blobtools`
+
+```
+
+/nesi/nobackup/uoo02752/earwig/bin/blobtoolkit/blobtools2/blobtools create \
+--fasta ../LW_Assembly.fasta \
+--meta ../LW_Assembly.yaml \
+--taxid 430899 \
+--taxdump /nesi/nobackup/uoo02772/crw/2.nanopore/1.CRW_nanopore_rawdata/guppy.5/nanolyse/porechop/nanoqc/nanofilt/flye/Flye/purgehaplotigs/ragtag_output/lrscaff/scaffolds1/scaffolds2/scaffolds3/scaffolds4/scaffolds5/rails.cobbler/lrgapcloser/Output/sn.10x.ragtag/ragtag_output/ragtag.2/ragtag_output/arbitr/arks/rascaf/alignment/rascaf/purge_haplotigs/ragtag/ragtag_output/ragtag2/ragtag_output/blobtools/taxdump/ \
+LW_Assembly
+
+/nesi/nobackup/uoo02752/earwig/bin/blobtoolkit/blobtools2/blobtools add \
+ --hits ../blastn/results/blastn.out \
+ --hits ../diamondx/results/output.blastx.all \
+ --cov ../coverage/LW_Assembly.bam \
+ --taxrule bestsumorder \
+ --taxdump /nesi/nobackup/uoo02772/crw/2.nanopore/1.CRW_nanopore_rawdata/guppy.5/nanolyse/porechop/nanoqc/nanofilt/flye/Flye/purgehaplotigs/ragtag_output/lrscaff/scaffolds1/scaffolds2/scaffolds3/scaffolds4/scaffolds5/rails.cobbler/lrgapcloser/Output/sn.10x.ragtag/ragtag_output/ragtag.2/ragtag_output/arbitr/arks/rascaf/alignment/rascaf/purge_haplotigs/ragtag/ragtag_output/ragtag2/ragtag_output/blobtools/taxdump/ \
+LW_Assembly
+
+/nesi/nobackup/uoo02752/earwig/bin/blobtoolkit/blobtools2/blobtools filter \
+--param bestsumorder_superkingdom--Keys=Bacteria \
+--param bestsumorder_superkingdom--Keys=Viruses \
+--param LW_Assembly_cov--Min=5 \
+--param length--Min=1000 \
+--fasta ../LW_assembly.fasta \
+--output ./filtered.bacteria.viruses.minl1000.covmin5 \
+LW_Assembly
+
+
+/nesi/nobackup/uoo02752/earwig/bin/blobtoolkit/blobtools2/blobtools filter \
+--param LW_Assembly_cov--Min=5 \
+--param length--Min=1000 \
+--fasta ../LW_assembly.fasta \
+--invert \
+--output ./filter.mincov5.minlen1000.invert \
+LW_Assembly
+
+```
