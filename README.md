@@ -700,4 +700,39 @@ export PATH=/nesi/nobackup/uoo02752/nematode/bin/rascaf:$PATH
 rascaf-join -r LW_mRNA_scaffold.out -o LW_mRNA_scaffold
 
 ```
+Then we ran 'purgehaplotigs' to remove redundandant and chimeric reads.
+
+`Script for purgehaplotigs'
+
+```
+#!/bin/bash -e
+
+#SBATCH --nodes 1
+#SBATCH --cpus-per-task 1
+#SBATCH --ntasks 10
+#SBATCH --job-name purgehap.lw
+#SBATCH --mem=50G
+#SBATCH --time=08:00:00
+#SBATCH --account=uoo02772
+#SBATCH --output=%x_%j.out
+#SBATCH --error=%x_%j.err
+#SBATCH --mail-type=ALL
+#SBATCH --mail-user=katma889@student.otago.ac.nz
+#SBATCH --hint=nomultithread
+
+module load SAMtools/1.13-GCC-9.2.0
+module load minimap2/2.20-GCC-9.2.0
+module load BEDTools/2.29.2-GCC-9.2.0
+
+#minimap2 -t 16 -ax map-ont LW_mRNA_scaffold.fa lw_ont_nanolyse_porechop.fa \
+#--secondary=no | samtools sort -m 5G -o aligned.bam -T tmp.ali
+
+export PATH="/nesi/nobackup/uoo02752/.conda/envs/purge_haplotigs_env/bin:$PATH"
+#purge_haplotigs hist -b aligned.bam -g LW_mRNA_scaffold.fa -t 10
+
+#purge_haplotigs cov -i aligned.bam.gencov -l 0 -m 35 -h 190 -o coverage_stats.csv
+
+purge_haplotigs purge -g LW_mRNA_scaffold.fa -c coverage_stats.csv -b aligned.bam
+
+```
 
