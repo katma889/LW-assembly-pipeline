@@ -702,7 +702,7 @@ rascaf-join -r LW_mRNA_scaffold.out -o LW_mRNA_scaffold
 ```
 Then we ran 'purgehaplotigs' to remove redundandant and chimeric reads.
 
-`Script for purgehaplotigs'
+`Script for purgehaplotigs`
 
 ```
 #!/bin/bash -e
@@ -733,6 +733,30 @@ export PATH="/nesi/nobackup/uoo02752/.conda/envs/purge_haplotigs_env/bin:$PATH"
 #purge_haplotigs cov -i aligned.bam.gencov -l 0 -m 35 -h 190 -o coverage_stats.csv
 
 purge_haplotigs purge -g LW_mRNA_scaffold.fa -c coverage_stats.csv -b aligned.bam
+
+```
+Then we ran `RagTag` for scaffolding the curated genome using discarded haplotigs reads from purgehaplotigs.
+
+`Script for RagTag`
+
+#!/bin/bash -e
+
+#SBATCH --nodes 1
+#SBATCH --cpus-per-task 1
+#SBATCH --ntasks 10
+#SBATCH --job-name ragtag.lw
+#SBATCH --mem=30G
+#SBATCH --time=01:00:00
+#SBATCH --account=uoo02772
+#SBATCH --output=%x_%j.out
+#SBATCH --error=%x_%j.err
+#SBATCH --mail-type=ALL
+#SBATCH --mail-user=katma889@student.otago.ac.nz
+#SBATCH --hint=nomultithread
+
+export PATH="/nesi/nobackup/uoo02752/nematode/bin/miniconda3/bin:$PATH"
+
+ragtag.py scaffold ../curated.haplotigs.fasta ragtag.scaffold.renamed.fasta
 
 ```
 
