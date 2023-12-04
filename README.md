@@ -1,7 +1,10 @@
 ## Lucerne weevil-assembly-pipeline
 Sitona discoidus whole genome assembly pipeline
 ## Sequencing of lucerne weevil
- We sequenced individual 4 different lucerne weevil using Nanopore MinION flow cells which in total gave us coverage over > 30 times the genome of this weevil. Similarly we  sequenced the weevil using linked read technology (10x data) which is over 60 times the coverage of the estimated genome of this weevil.The schematic represantation of the genome assembly pipeline is given below;
+ We sequenced individual 4 different lucerne weevil using Nanopore MinION flow cells which in total gave us coverage over > 30 times the genome of this weevil. Similarly we  sequenced the weevil using linked read technology (10x data) which is over 60 times the coverage of the estimated genome of this weevil.The schematic represantation of the genome assembly pipeline is given below.
+ 
+![plot](./lw-assembly-pipeline.png)
+
  
 ### Long read genome assembly of this weevil 
 We got an output yield of raw data 9.38 Gb, 6.21 Gb, 3.77 Gb and 10.6 Gb from ist. second, 3rd and 4th run respectively. We combined the total out from 4 minion runs and ran basecalling. First raw `fast5` files were base called using `guppy`
@@ -14,8 +17,8 @@ We got an output yield of raw data 9.38 Gb, 6.21 Gb, 3.77 Gb and 10.6 Gb from is
 #SBATCH --job-name=guppy_lw                #name of the job
 #SBATCH --account=uoo02772              #my project number in nesi
 #SBATCH --time=40:00:00                 #wall time
-#SBATCH --partition=gpu                 #guppy runs faster in gpu partition in nesi, than other partition
-#SBATCH --gres=gpu:1                    #some configuration for gpu partition, that i don't understand, suggested by nesi support
+#SBATCH --partition=gpu                 #guppy runs faster in gpu partition in nesi
+#SBATCH --gres=gpu:1                    #some configuration for gpu partition
 #SBATCH --mem=6G                         #memory 6gb
 #SBATCH --ntasks=6                       #ntask set to 4
 #SBATCH --cpus-per-task=1               #cpu per task set to 1
@@ -49,7 +52,7 @@ Then after we ran `pycoQC` on base called fastq files obatined from `guppy` for 
 #SBATCH --mail-user=katma889@student.otago.ac.nz
 #SBATCH --hint=nomultithread
 
-export PATH="/nesi/nobackup/uoo02752/nematode/bin/miniconda3/bin:$PATH"
+export PATH="/path/to/miniconda3/bin:$PATH"
 
 pycoQC -f ../sequencing_summary.txt -o pycoQC_output.html
 
