@@ -1,7 +1,8 @@
 ## Lucerne weevil-assembly-pipeline
-S.discoidus whole genome assembly pipeline
+Sitona discoidus whole genome assembly pipeline
 ## Sequencing of lucerne weevil
- We sequenced individual 4 different lucerne weevil using Minion flow cells which in total gave us coverage over > 30 times the genome of this weevil. Similarly we  sequenced the weevil using linked read technology (10x data) which is over 60 times the coverage of the estimated genome of this weevil.
+ We sequenced individual 4 different lucerne weevil using Nanopore MinION flow cells which in total gave us coverage over > 30 times the genome of this weevil. Similarly we  sequenced the weevil using linked read technology (10x data) which is over 60 times the coverage of the estimated genome of this weevil.The schematic represantation of the genome assembly pipeline is given below;
+ 
 ### Long read genome assembly of this weevil 
 We got an output yield of raw data 9.38 Gb, 6.21 Gb, 3.77 Gb and 10.6 Gb from ist. second, 3rd and 4th run respectively. We combined the total out from 4 minion runs and ran basecalling. First raw `fast5` files were base called using `guppy`
 
