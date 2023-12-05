@@ -1,13 +1,13 @@
 ## Lucerne weevil-assembly-pipeline
 Sitona discoidus whole genome assembly pipeline
 ## Sequencing of lucerne weevil
- We sequenced individual 4 different lucerne weevil using Nanopore MinION flow cells which in total gave us coverage over > 30 times the genome of this weevil. Similarly we  sequenced the weevil using linked read technology (10x data) which is over 60 times the coverage of the estimated genome of this weevil.The schematic represantation of the genome assembly pipeline is given below.
+ We sequenced 4 individual adult lucerne weevils using Nanopore MinION flow cells which in total gave us coverage over > 30 times the genome of this weevil. Similarly, we  also sequenced the weevil using linked read technology (10X Chromium) which was >60X the coverage of the estimated genome of this weevil.The schematic represantation of the genome assembly pipeline is given below.
  
 ![plot](./lw-assembly-pipeline.png)
 
  
 ### Long read genome assembly of this weevil 
-We got an output yield of raw data 9.38 Gb, 6.21 Gb, 3.77 Gb and 10.6 Gb from ist. second, 3rd and 4th run respectively. We combined the total out from 4 minion runs and ran basecalling. First raw `fast5` files were base called using `guppy`
+We got an output yield of raw data 9.38 Gb, 6.21 Gb, 3.77 Gb and 10.6 Gb from ist. second, 3rd and 4th run respectively. We combined the total output from these 4 minion runs in total and conducted basecalling. ALL THE raw `fast5` files were base called using `guppy`. The script for 'Guppy' is given below.
 
  `Script for Guppy version 5`
  
@@ -70,9 +70,9 @@ Minion Runs	 Reads	       Bases (Gb)	  Median Read Length	  Median PHRED score
 4	          2,210,541	     10.6	        1300	                13.4
 
 ```
-Then we ran nanlolyse in the guppy basecalled fast files to remove lama DNA CS (control) from our fastq file.
+Then we ran 'NanoLyse' in the guppy basecalled fast files to remove lama DNA CS (control) from our fastq file.
 
-`Script for nanolyze`
+`Script for NanoLyse`
 
 ```
 #!/bin/bash -e
@@ -96,9 +96,9 @@ export PATH="/nesi/nobackup/uoo02752/nematode/bin/miniconda3/bin:$PATH"
 cat ../lw.ont.all.merged.fastq | NanoLyse --reference ./dna_cs.fasta | gzip > lw_ont_filtered.fastq.gz
 
 ```
-The above run gave us filleted reads named `lw_ont_filtered.fastq.gz`.Then the filtered reads were further processed to `Porechop` to find and remove the adapters from filetred reads
+The above run gave us filleted reads named `lw_ont_filtered.fastq.gz`.Then the filtered reads were further processed to `Porechop` to find and remove the adapters from filetred nanopore reads
 
-`Script for porechop`
+`Script for Porechop`
 
 ```
 #!/bin/bash -e
@@ -121,7 +121,7 @@ module load Porechop/0.2.4-gimkl-2020a-Python-3.8.2
 porechop -i ../lw_ont_filtered.fastq.gz -o lw_ont_nanolyse_porechop.fastq.gz --threads 10
 
 ```
-Then we run Flye (2.8.3) assembler to `lw_ont_nanolyse_porechop.fastq.gz` which gave us result under flye folder with different files
+Then we run Flye (2.8.3) assembler to `lw_ont_nanolyse_porechop.fastq.gz` which gave us result under flye folder with different files. we used the assmly from 'Flye' as our primary assembly and used 'Supernova' assembly from 10x linked reads for scafolding and gap closing process. Likewise, we use the Illumina mRNA transcriptomic data for scafolding and ploshing the genome to obtain a good quality hybrid genome for this pernicious weevil.
 
 `Script for Flye`
 
