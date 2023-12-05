@@ -1,4 +1,4 @@
-##Assembling linked reads from 10X Genomics
+## Assembling linked reads from 10X Genomics
 For Sitona discoideus whole genome project, we combinated the linked read data from 10x genomics obtained from sequencing in Novaseq and Hiseq. As the first sequencing resulted only about 36X coverage of the eastimated genome size of this weevil, therefore the same libraries (leftover) were resequenced in HiSEQ to obtain additional data. Combining both data resulted in a data of over 60X times coverage of the estimated genome of the weevil.
 The script for 'Supernova v.2.1.1' which I used for assembling linked reads is given below.
 
@@ -24,7 +24,7 @@ supernova run --id=lw_10xSN \
               --fastqs=/path/to/linked-read/fastq/files 
 ```
              
-##Upon completing the assembly which resulted in fasta file was produced to 'pseudohap'style with the script below.
+## Upon completing the assembly which resulted in fasta file was produced to 'pseudohap'style with the script below.
 
 ```
 #!/bin/bash -e
@@ -49,4 +49,4 @@ supernova mkoutput \
         --asmdir=path/to/working-directory-of-supernova/lw_10xSN/outs/assembly \      # this is a path to the output directory `assembly` created by supernova
         --outprefix=./lw_10xSN
 ```
-##the script above produced a assembly named 'lw_10xSN.fasta.gz' which was quality checked using 'Quast' as described earlier
+## the script above produced a assembly named 'lw_10xSN.fasta.gz' which was quality checked using 'Quast' as described earlier
