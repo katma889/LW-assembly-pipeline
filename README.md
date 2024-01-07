@@ -643,3 +643,9 @@ java -Xmx200G -jar $EBROOTPILON/pilon.jar --genome LW_assembly.fasta --frags LW_
 --gapmargin 1 --mingap 10000000 --threads 10 --verbose --changes 2>Pilon.stderr.txt 1>Pilon.stdout.txt
 
 ```
+
+# Repeat annotation
+Refer to scripts [here](https://github.com/upendrabhattarai/Earwig_genome_project?tab=readme-ov-file#2-denovo-repeat-library) for repeat annotation.
+
+# Annotation pipeline
+Please refer to scripts [here](https://github.com/upendrabhattarai/Earwig_genome_project?tab=readme-ov-file#3-genome-annotation) for our annotation pipeline.
